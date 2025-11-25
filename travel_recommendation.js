@@ -9,23 +9,30 @@ btnClear.addEventListener('click', resetForm);
 
 function searchCondition() {
 	const input = document.getElementById('conditionInput').value.toLowerCase();
+    const recommandationInput = normalizeRecommandationInput(input);
 	const resultsDiv = document.getElementById('results');
-	resultDiv.innerHTML = '';
+	resultsDiv.innerHTML = '';
 	fetch('./travel_recommendation_api.json')
 	.then(response => response.json())
 	.then(data => {
-        let searchResults = searchCountries(data, input);
-        searchResults = searchResults.concat(searchTemples(data, input));
-        searchResults = searchResults.concat(searchBeaches(data, input));
-       
+        let searchResults = [];
+        if (recommandationInput !== undefined) {
+            if (recommandationInput == 'beach') {
+                searchResults = searchBeaches(data, '');
+            } else if (recommandationInput == 'temple') {
+                searchResults = searchTemples(data, '');
+            } else if (recommandationInput == 'country') {
+                searchResults = searchCountries(data, '');
+            }
+        } else {
+            searchResults = searchCountries(data, input);
+            searchResults = searchResults.concat(searchTemples(data, input));
+            searchResults = searchResults.concat(searchBeaches(data, input));
+        }
+            
         if (searchResults && searchResults.length > 0) {
             for (let i = 0; i < searchResults.length; i++) {
-                resultsDiv.innerHTML += `<div class="result-div">`;
-                resultsDiv.innerHTML += `<img src="${searchResults[i].imageUrl}" alt="hjh"></img>`;
-                resultsDiv.innerHTML += `<h2>${searchResults[i].name}</h2>`;
-                resultsDiv.innerHTML += `<p><strong>Symptoms:</strong> ${searchResults[i].description}</p>`;
-                resultsDiv.innerHTML += `<button id="btnVisit" class="btn-label">Visit</button>`;
-                resultsDiv.innerHTML += `</div>`;
+                resultsDiv.innerHTML += `<div class="result-div"><img src="${searchResults[i].imageUrl}" alt="hjh"></img><h2>${searchResults[i].name}</h2><p>${searchResults[i].description}</p><button id="btnVisit" class="btn-label">Visit</button></div>`;
             }
         } else {
             resultsDiv.innerHTML = 'No result.';
@@ -37,6 +44,22 @@ function searchCondition() {
 	});
 }
 
+function normalizeRecommandationInput(input) {
+    if (input == 'beach' || input == 'temple' || input == 'country') {
+        return input;
+    }
+    if (input == 'beaches') {
+        return 'beach';
+    }
+    if (input == 'temples') {
+        return 'temple'
+    }
+    if (input == 'countries') {
+        return 'country';
+    }
+    return undefined;
+}
+
 function searchCountries(data, input) {
     let results = [];
     for (let i = 0; i < data.countries.length; i++) {
@@ -46,7 +69,7 @@ function searchCountries(data, input) {
             if (results.length === 0) {
                 results = result;
             } else {
-                results.concat(result);
+                results = results.concat(result);
             }
         }
     }
@@ -60,7 +83,7 @@ function searchTemples(data, input) {
         if (results.length === 0) {
             results = result;
         } else {
-            results.concat(result);
+            results = results.concat(result);
         }
     }
     return results;
@@ -73,7 +96,7 @@ function searchBeaches(data, input) {
         if (results.length === 0) {
             results = result;
         } else {
-            results.concat(result);
+            results = results.concat(result);
         }
     }
     return results;

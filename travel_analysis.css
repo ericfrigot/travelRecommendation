@@ -224,15 +224,15 @@ h1 {
 	background-color: #0056b3;
 }
 
-#result {
+#results {
     color: white;
 }
 
-#result img {
+#results img {
     width: 300px;
 }
 
-#result .result-div {
+#results .result-div {
     text-align:center;
     padding: 20px;
     border-radius: 4px;
