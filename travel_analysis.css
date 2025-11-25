@@ -118,6 +118,15 @@ h1 {
 
 .container-home {
     padding: 100px;
+    display: flex;
+}
+
+.container-home .left {
+    flex: 0 0 45%;
+}
+
+.container-home .right {
+    flex: 1;
 }
 
 .container-home h1 {
@@ -213,4 +222,19 @@ h1 {
 
 #contactForm button:hover {
 	background-color: #0056b3;
+}
+
+#result {
+    color: white;
+}
+
+#result img {
+    width: 300px;
+}
+
+#result .result-div {
+    text-align:center;
+    padding: 20px;
+    border-radius: 4px;
+    background-color: rgba(0,74,153,0.5);
 }
